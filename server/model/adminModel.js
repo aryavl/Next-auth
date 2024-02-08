@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose'
-import db from '../database/config.js'
 
 
 const adminSchema = new Schema({

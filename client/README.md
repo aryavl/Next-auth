@@ -41,4 +41,4 @@ Welcome to the Student Management System repository! This project is a web appli
 
 2. Hosted on vercel
 
-link 
+link  https://student-maangement-system.vercel.app/ 

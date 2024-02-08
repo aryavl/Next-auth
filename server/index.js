@@ -1,20 +1,21 @@
-import express from 'express';
-import 'dotenv/config';
-import mongoose from 'mongoose';
+import express from "express";
+import "dotenv/config";
+import mongoose from "mongoose";
+import adminModel from "./model/adminModel.js";
 
 const app = express();
-const port = process.env.PORT || 8081;
-mongoose.connect(process.env.MONGODB_URI)
-const db = mongoose.connection
-app.get('/', (req, res) => {
-    res.json({ message: "Hello" });
-});
 
-db.on('error',console.error.bind(console,"connection error")
-)
-db.once('open',()=>{
-    console.log("mongodb connected"); 
-    app.listen(process.env.PORT,()=>{
-        console.log("connected TO ",`${process.env.PORT}`);
+app.get("/", (req, res) => {
+  res.json({ message: "Hello" });
+});
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+      console.log("Connected to MongoDB");
     })
-})
+    .catch((error) => {
+      console.error("Error connecting to MongoDB:", error);
+    });
+ adminModel 
+app.listen(process.env.PORT, () => {
+  console.log("connected TO ", `${process.env.PORT}`);
+});

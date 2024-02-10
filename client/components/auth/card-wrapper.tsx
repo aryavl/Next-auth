@@ -15,6 +15,7 @@ import BackButton from "./back-button";
 interface CardWrapperProps {
   children: React.ReactNode;
   headerLabel: string;
+  title:string
   
 }
 
@@ -22,13 +23,14 @@ const CardWrapper = ({
   
   children,
   headerLabel,
+  title
   
 }: CardWrapperProps) => {
   return (
     <>
       <Card className=" w-[80%]  m-auto mt-20 mb-20 shadow-md">
         <CardHeader >
-        <Header label={headerLabel}/>
+        <Header headerTitle={title} label={headerLabel}/>
         </CardHeader>
         <CardContent>
        

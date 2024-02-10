@@ -1,6 +1,6 @@
 "use client"
 import * as z from 'zod'
-import React from "react";
+import React, { useState } from "react";
 import CardWrapper from "./card-wrapper";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,15 +21,27 @@ import Image from 'next/image';
 import { CardFooter } from '../ui/card';
 import Social from './social';
 import BackButton from './back-button';
+import { fetchUser } from '@/helpers/fetchers';
 interface LoginFormProps {
     backButtonLabel: string;
     backButtonHref: string;
     showSocial?: boolean;
   }
 const LoginForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) => {
-    const onSubmittt = (values:z.infer<typeof LoginSchema>)=>{
-console.log(values);
+    const [error,setError] = useState<string | undefined>("")
+    const [success,setSuccess] = useState<string | undefined>("")
 
+    const onSubmittt = async(values:z.infer<typeof LoginSchema>)=>{
+      setError("")
+      setSuccess("")
+      const userss= await fetchUser(values)
+      console.log(userss);
+      
+      setSuccess(userss.success)
+      if(userss.ok){
+      }else{
+        setError(userss.error)
+      }
     }
     const form =useForm<z.infer<typeof LoginSchema>>({
         resolver:zodResolver(LoginSchema),
@@ -101,8 +113,8 @@ console.log(values);
                 )}
                 />
             </div>
-            <FormError message=""/>
-            <FormSuccess message=''/>
+            <FormError message={error}/>
+            <FormSuccess message={success}/>
             <Button
             className='w-full'
             type='submit'

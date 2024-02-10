@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { LoginSchema } from '@/schemas';
+import { LoginSchema, RegisterSchema } from '@/schemas';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import FormError from '../form-error';
@@ -21,41 +21,44 @@ import Image from 'next/image';
 import { CardFooter } from '../ui/card';
 import Social from './social';
 import BackButton from './back-button';
-import { fetchUser } from '@/helpers/fetchers';
+import { fetchRegister, fetchUser } from '@/helpers/fetchers';
 interface LoginFormProps {
     backButtonLabel: string;
     backButtonHref: string;
     showSocial?: boolean;
   }
-const LoginForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) => {
+const RegisterForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) => {
     const [error,setError] = useState<string | undefined>("")
     const [success,setSuccess] = useState<string | undefined>("")
+// console.log("register");
 
-    const onSubmittt = async(values:z.infer<typeof LoginSchema>)=>{
+    const onSubmittt = async(values:z.infer<typeof RegisterSchema>)=>{
       setError("")
       setSuccess("")
-      
+      // console.log("hhh",values);
       try {
-        const userss= await fetchUser(values)
+        const userss = await fetchRegister(values);
         console.log(userss, "use");
-        setSuccess("Successfully Signin"); // Set success message if registration is successful
+        setSuccess("Successfully registered"); // Set success message if registration is successful
     } catch (error:any) {
         setError(error.message); // Set error message if registration fails
     }
 
     }
-    const form =useForm<z.infer<typeof LoginSchema>>({
-        resolver:zodResolver(LoginSchema),
+    const form =useForm<z.infer<typeof RegisterSchema>>({
+        resolver:zodResolver(RegisterSchema),
         defaultValues:{
             email: "",
             password:"",
+            name:''
         }
     })
 
   return (
     <CardWrapper
-    title='Login form'
-      headerLabel="Welcome Back"
+     
+      headerLabel="Create an account"
+      title="Register form"
     >
         <div className="grid lg:gap-x-8 lg:grid-cols-12 lg:gap-y-8 grid-cols-1  ">
         <div className="hidden lg:col-span-5 lg:block">
@@ -76,10 +79,28 @@ const LoginForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) =
                   </div>
       <Form {...form}>
         <form action=""
+        
         onSubmit={form.handleSubmit(onSubmittt)}
         className='space-y-6'
         >
             <div className='space-y-4'>
+                <FormField
+                control={form.control}
+                name='name'
+                render={({field})=>(
+                    <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                            <Input
+                            {...field}
+                            placeholder='John Foe'
+                            type='text'
+                            />
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                )}
+                />
                 <FormField
                 control={form.control}
                 name='email'
@@ -121,7 +142,7 @@ const LoginForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) =
             className='w-full'
             type='submit'
             >
-                Login
+                Create an account
             </Button>
         </form>
       </Form>
@@ -138,4 +159,4 @@ const LoginForm = ({backButtonHref,backButtonLabel,showSocial}:LoginFormProps) =
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
